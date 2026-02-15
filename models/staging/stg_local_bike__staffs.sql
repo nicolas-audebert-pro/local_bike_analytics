@@ -4,7 +4,7 @@ SELECT
     last_name,
     email,
     phone,
-    active,
+    active as is_active,
     store_id,
-    manager_id 
+    CASE manager_id LIKE "NULL" THEN NULL ELSE manager_id END AS manager_id
 FROM {{source("local_bike","staffs")}}
