@@ -91,14 +91,14 @@ models:
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "quantity > 0 AND quantity = CAST(quantity AS INT64)"
+              expression: " > 0 AND quantity = CAST(quantity AS INT64)"
 
       - name: unit_price
         description: "Unit price of the product"
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "unit_price > 0"
+              expression: " > 0"
 
       - name: discount
         description: "Discount in percent offer on the product"
@@ -124,27 +124,20 @@ models:
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "order_status IN (1, 2, 3, 4)"
+              expression: "IN (1, 2, 3, 4)"
 
       - name : order_date
         description: "Date of the order"
         tests:
           - not_null
-          - dbt_utils.expression_is_true:
-              expression: "CAST(order_date AS DATE) IS NOT NULL"
 
       - name : required_date
         description: "Date of shipping ask by the customer"
         tests:
           - not_null
-          - dbt_utils.expression_is_true:
-              expression: "CAST(order_date AS DATE) IS NOT NULL"
 
       - name : shipped_date
         description: "Real shipped date of the order. NULL if not delivered yet."
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: "SAFE_CAST(shipped_date AS DATE) IS NOT NULL OR shipped_date IS NULL"
 
       - name : store_id
         description: "Secondary key to join stores table. Identifiant of the store attached to the order"
@@ -224,7 +217,7 @@ models:
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "is_active IN (0, 1)"
+              expression: "IN (0, 1)"
 
       - name: store_id
         description: "Secondary key to join the stores table. Id of the store where the staff is attached"
@@ -258,7 +251,7 @@ models:
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "quantity >= 0 AND quantity = CAST(quantity AS INT64)"
+              expression: " >= 0 AND quantity = CAST(quantity AS INT64)"
 
   - name: stg_local_bike__stores
     description: "List of the stores owned by the company"

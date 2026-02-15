@@ -6,5 +6,5 @@ SELECT
     phone,
     active as is_active,
     store_id,
-    CASE manager_id LIKE "NULL" THEN NULL ELSE manager_id END AS manager_id
+    CASE WHEN manager_id LIKE "NULL" THEN NULL ELSE manager_id END AS manager_id
 FROM {{source("local_bike","staffs")}}
