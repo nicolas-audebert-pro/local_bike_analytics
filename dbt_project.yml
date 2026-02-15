@@ -36,13 +36,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 # using the `{{ config(...) }}` macro.
 
 models:
-<<<<<<< HEAD
   local_bike_analytics:
-    # Applies to all files under models/example/
-    staging:
-=======
-  my_new_project:
-    # Applies to all files under models/example/
-    example:
->>>>>>> a39a54e9bcdbb2cbc980fe32a7468d3decf94b0e
-      +materialized: table
+  # Applies to all files under models/staging
+      staging:
+        +materialized: table
