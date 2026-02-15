@@ -1,0 +1,59 @@
+# version: 2
+
+# models:
+#   - name: stg_orders
+#     description: "Nettoyage et standardisation des commandes"
+#     columns:
+#       - name: order_id
+#         description: "Identifiant unique normalisé"
+#         tests:
+#           - not_null
+#           - unique
+
+#       - name: customer_id
+#         tests:
+#           - not_null
+
+#   - name: brands
+#     description: "List of brands of bike sold by the company"
+#     columns:
+#       - name: brand_id
+#         description: "Unique identify of the brand"
+#         tests:
+#           - not_null
+#           - unique
+
+#       - name: brand_name
+#         description: "Name of the brand"
+#         tests:
+#           - not_null
+
+#       - name: created_at
+#         description: "Date de création de la commande"
+
+#   - name: order_items
+#     description: "Détail des lignes de commande"
+#     columns:
+#       - name: order_item_id
+#         tests:
+#           - not_null
+#           - unique
+
+#       - name: order_id
+#         tests:
+#           - relationships:
+#             to: source('raw_sales', 'orders')
+#             field: order_id
+
+#   - name: raw_marketing
+#     description: "Données marketing brutes"
+#     columns:
+#       - name: truc
+  
+#   - name: campaigns
+#     description: "Campagnes marketing"
+#     columns:
+#       - name: campaign_id
+#         tests:
+#           - not_null
+#           - unique
