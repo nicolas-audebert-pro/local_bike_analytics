@@ -15,6 +15,7 @@ models:
         description: "Name of the bike's brand"
         tests:
           - not_null
+          - unique
 
   - name: stg_local_bike__categories
     description: "List of the bike's categories sold by the company"
@@ -29,6 +30,7 @@ models:
         description: "Name of the bike's category"
         tests:
           - not_null
+          - unique
 
   - name: stg_local_bike__customers
     description: "List of the customers"
@@ -39,33 +41,42 @@ models:
           - not_null
           - unique
           
-      - name: first_name
+      - name: customer_first_name
         description: "First name of the customer"
         tests:
           - not_null
           
-      - name: last_name
+      - name: customer_last_name
         description: "Last name of the customer"
         tests:
           - not_null
           
-      - name: phone
+      - name: customer_phone
         description: "Phone number of the customer"
           
-      - name: email
+      - name: customer_email
         description: "Email address of the customer"
+        tests:
+          - not_null
+          - unique
           
-      - name: street
+      - name: customer_street
         description: "Address street of the customer"
           
-      - name: city
+      - name: customer_city
         description: "City of the customer"
+        tests:
+        - not_null
 
-      - name: state
+      - name: customer_state
         description: "State of the customer"
+        tests:
+        - not_null
 
-      - name: zip_code
+      - name: customer_zip_code
         description: "Zip code of the customer"
+        tests:
+        - not_null
 
   - name: stg_local_bike__order_items
     description: "Details of the order with items"
@@ -80,36 +91,46 @@ models:
         description: "Secondary key to join orders table"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__orders')
+                field: order_id
 
       - name: product_id
         description: "Secondary key to join products table"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__products')
+                field: product_id
 
-      - name: quantity
+      - name: order_quantity
         description: "Quantity of the product sell in the order"
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: " > 0 AND quantity = CAST(quantity AS INT64)"
+              expression: "> 0"
 
       - name: unit_price
         description: "Unit price of the product"
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: " > 0"
+                expression: "> 0"
 
       - name: discount
         description: "Discount in percent offer on the product"
         tests:
           - not_null
+          - dbt_utils.expression_is_true:
+              expression: "BETWEEN 0 AND 1"
 
   - name: stg_local_bike__orders
     description: "Header of the orders"
     columns:
       - name: order_id
-        description: "Unique identify (PRimary key) for the order"
+        description: "Unique identify (Primary key) for the order"
         tests:
           - not_null
           - unique
@@ -118,13 +139,17 @@ models:
         description: "Secondary key to join customers table. Identifiant of the customer who buy the order"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__customers')
+                field: customer_id
 
       - name : order_status
         description: "Identifiant of the status 1, 2, 3 or 4 (shipped)"
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "IN (1, 2, 3, 4)"
+                expression: "IN (1, 2, 3, 4)"
 
       - name : order_date
         description: "Date of the order"
@@ -135,19 +160,32 @@ models:
         description: "Date of shipping ask by the customer"
         tests:
           - not_null
+          - dbt_utils.expression_is_true:
+                expression: ">= order_date"
 
       - name : shipped_date
         description: "Real shipped date of the order. NULL if not delivered yet."
+        tests:
+        - dbt_utils.expression_is_true:
+                expression: " >= order_date OR shipped_date IS NULL"
 
       - name : store_id
         description: "Secondary key to join stores table. Identifiant of the store attached to the order"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__stores')
+                field: store_id
 
       - name : staff_id
         description: "Secondary key to join staffs table. Identifiant of the staff who in charge of the order"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__staffs')
+                field: staff_id
 
   - name: stg_local_bike__products
     description: "List of the bikes sold by the company"
@@ -167,21 +205,33 @@ models:
         description: "Secondary key to join the brands table. Id of the product's brand"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__brands')
+                field: brand_id
 
       - name: category_id
         description: "Secondary key to join the categories table. Id of the product's category"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__categories')
+                field: category_id
 
       - name: model_year
         description: "Year of production of the product"
         tests:
           - not_null
+          - dbt_utils.expression_is_true:
+                expression: ">= 2000"
 
-      - name: unit_price
+      - name: product_unit_price
         description: "Unit price of the product"
         tests:
           - not_null
+          - dbt_utils.expression_is_true:
+                expression: "> 0"
 
   - name: stg_local_bike__staffs
     description: "List of the staff employed by the company"
@@ -192,37 +242,41 @@ models:
           - not_null
           - unique
 
-      - name: first_name
+      - name: staff_first_name
         description: "First name of the staff member"
         tests:
           - not_null
 
-      - name: last_name
+      - name: staff_last_name
         description: "Last name of the staff member"
         tests:
           - not_null
 
-      - name: email
+      - name: staff_email
         description: "Email address of the staff member"
         tests:
           - not_null
 
-      - name: phone
+      - name: staff_phone
         description: "Phone number of the staff member"
         tests:
           - not_null
 
-      - name: is_active
+      - name: staff_is_active
         description: "Is the staff member is still active ? 1 -> Yes / 0 -> No"
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: "IN (0, 1)"
+                expression: "IN (0, 1)"
 
       - name: store_id
         description: "Secondary key to join the stores table. Id of the store where the staff is attached"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__stores')
+                field: store_id
 
       - name: manager_id
         description: "Id of the manager's staff member (staff_id)"
@@ -240,18 +294,26 @@ models:
         description: "Secondary key to join the stores table. Id of the store where is the stock"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__stores')
+                field: store_id
 
       - name: product_id
         description: "Secondary key to join the products table. Id of the product what is in the stock"
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__products')
+                field: product_id
 
-      - name: quantity
+      - name: stock_quantity
         description: "Quantity of the product in the stock"
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: " >= 0 AND quantity = CAST(quantity AS INT64)"
+                expression: ">= 0"
 
   - name: stg_local_bike__stores
     description: "List of the stores owned by the company"
@@ -267,32 +329,32 @@ models:
         tests:
           - not_null
           
-      - name: phone
+      - name: store_phone
         description: "Phone number of the store"
         tests:
           - not_null
           
-      - name: email
+      - name: store_email
         description: "Email address of the store"
         tests:
           - not_null
           
-      - name: street
+      - name: store_street
         description: "Address street of the store"
         tests:
           - not_null
           
-      - name: city
+      - name: store_city
         description: "City of the store"
         tests:
           - not_null
 
-      - name: state
+      - name: store_state
         description: "State of the store"
         tests:
           - not_null
 
-      - name: zip_code
+      - name: store_zip_code
         description: "Zip code of the store"
         tests:
           - not_null

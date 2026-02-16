@@ -1,9 +1,8 @@
 SELECT
-    order_id,
     CONCAT(order_id,'-',item_id) as order_items_id,
-    product_id,
-    COALESCE(quantity,0) as quantity,
-    COALESCE(list_price,0) as unit_price,
-    COALESCE(discount,0) as discount,
-    round(list_price * quantity * (1 - discount),2) as total_order_item_amount
+    cast(order_id as int64) as order_id,
+    cast(product_id as int64) as product_id,
+    cast(COALESCE(quantity,0) as int64) as order_quantity,
+    cast(COALESCE(list_price,0) as numeric) as unit_price,
+    cast(COALESCE(discount,0) as numeric) as discount
 FROM {{ source("local_bike","order_items")}}
