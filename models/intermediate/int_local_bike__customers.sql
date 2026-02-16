@@ -1,6 +1,6 @@
 SELECT
     customer_id,
-    concat(customer_first_name,' ',customer_last_name) as customer_full_name,
+    cast(concat(customer_first_name,' ',customer_last_name) as string) as customer_full_name,
     customer_first_name,
     customer_last_name,
     customer_phone,

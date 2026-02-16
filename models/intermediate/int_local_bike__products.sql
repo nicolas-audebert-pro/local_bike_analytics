@@ -1,7 +1,7 @@
 SELECT
     product_id,
     product_name,
-    brand_id
+    brand_id,
     category_id,
     model_year,
     product_unit_price

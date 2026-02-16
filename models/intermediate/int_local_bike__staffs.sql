@@ -1,6 +1,6 @@
 SELECT
     staff_id,
-    concat(staff_first_name,' ',staff_last_name) as staff_full_name,
+    cast(concat(staff_first_name,' ',staff_last_name) as string) as staff_full_name,
     staff_first_name,
     staff_last_name,
     staff_email,
