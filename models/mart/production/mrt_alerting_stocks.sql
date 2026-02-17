@@ -15,13 +15,12 @@ WITH most_sold_products AS (
 SELECT 
   s.store_name,
   s.product_name,
-  msp.sales_bucket,
   CASE
     WHEN msp.sales_bucket IS NULL THEN 'none'
     WHEN msp.sales_bucket = 1 THEN 'high'
     WHEN msp.sales_bucket = 2 THEN 'medium'
     WHEN msp.sales_bucket = 3 THEN 'low'
-  END AS criticite
+  END AS criticity
 FROM {{ref("dim_local_bike__stocks")}} s
 LEFT JOIN most_sold_products msp ON msp.store_id = s.store_id AND msp.product_id = s.product_id
 WHERE s.stock_quantity = 0
