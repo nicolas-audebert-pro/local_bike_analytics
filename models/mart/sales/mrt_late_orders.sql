@@ -1,5 +1,5 @@
 WITH late_orders AS (
-SELECT DISTINCT
+SELECT
   order_year,
   order_month,
   count(order_id) as total_late_order,
@@ -9,7 +9,7 @@ GROUP BY 1, 2
 ),
 
 total_orders AS (
-SELECT DISTINCT
+SELECT
   order_year,
   order_month,
   count(order_id) as total_order,
@@ -20,9 +20,9 @@ GROUP BY 1, 2
 SELECT DISTINCT
   o.order_year,
   o.order_month,
-  total_late_order,
-  total_order,
-  total_late_order / total_order as rate_late_order,
+  COALESCE(total_late_order,0) as total_late_order,
+  COALESCE(total_order,0) as total_order,
+  COALESCE(COALESCE(total_late_order,0) / COALESCE(total_order,0),0) as rate_late_order,
 FROM {{ref("dim_local_bike__orders")}} o
 LEFT JOIN late_orders l ON l.order_year = o.order_year AND l.order_month = o.order_month
 LEFT JOIN total_orders t ON t.order_year = o.order_year AND t.order_month = o.order_month
