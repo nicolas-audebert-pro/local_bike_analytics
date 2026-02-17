@@ -1,0 +1,51 @@
+version: 2
+
+models:
+
+  - name: stg_local_bike__staffs
+    description: "List of the staff employed by the company"
+    columns:
+      - name: staff_id
+        description: "Unique identify (Primary key) of the staff member"
+        tests:
+          - not_null
+          - unique
+
+      - name: staff_first_name
+        description: "First name of the staff member"
+        tests:
+          - not_null
+
+      - name: staff_last_name
+        description: "Last name of the staff member"
+        tests:
+          - not_null
+
+      - name: staff_email
+        description: "Email address of the staff member"
+        tests:
+          - not_null
+
+      - name: staff_phone
+        description: "Phone number of the staff member"
+        tests:
+          - not_null
+
+      - name: staff_is_active
+        description: "Is the staff member is still active ? 1 -> Yes / 0 -> No"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+                expression: "IN (0, 1)"
+
+      - name: store_id
+        description: "Secondary key to join the stores table. Id of the store where the staff is attached"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__stores')
+                field: store_id
+
+      - name: manager_id
+        description: "Id of the manager's staff member (staff_id)"

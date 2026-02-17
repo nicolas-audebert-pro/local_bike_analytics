@@ -8,4 +8,4 @@ SELECT
     discount,
     order_item_total_amount
 FROM {{ref("int_local_bike__order_items")}} oi
-LEFT JOIN {{ref("int_local_bike__products")}} p ON p.product_id = oi.product_id
+LEFT JOIN {{ref("stg_local_bike__products")}} p ON p.product_id = oi.product_id

@@ -1,0 +1,44 @@
+version: 2
+
+models:
+
+  - name: int_local_bike__stocks
+    description: "Stocks of the product by store"
+    columns:
+      - name: stock_id
+        description: "Unique identify (Primary key) of the stock. Concatenation of store_id and product_id"
+        tests:
+          - not_null
+          - unique
+
+      - name: store_id
+        description: "Secondary key to join the stores table. Id of the store where is the stock"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__stores')
+                field: store_id
+
+      - name: product_id
+        description: "Secondary key to join the products table. Id of the product what is in the stock"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__products')
+                field: product_id
+
+      - name: stock_quantity
+        description: "Quantity of the product in the stock"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+                expression: ">= 0"
+
+      - name: stock_value
+        description: "Amount value of the product's stock in the store"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+                expression: ">= 0"

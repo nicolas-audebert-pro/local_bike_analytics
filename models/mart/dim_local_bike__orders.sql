@@ -19,5 +19,5 @@ SELECT
     order_total_amount
 FROM {{ref("int_local_bike__orders")}} o
 LEFT JOIN {{ref("int_local_bike__customers")}} c on c.customer_id = o.customer_id
-LEFT JOIN {{ref("int_local_bike__stores")}} so on so.store_id = o.store_id
+LEFT JOIN {{ref("stg_local_bike__stores")}} so on so.store_id = o.store_id
 LEFT JOIN {{ref("int_local_bike__staffs")}} sa on sa.staff_id = o.staff_id

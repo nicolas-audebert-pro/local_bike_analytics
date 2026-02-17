@@ -1,0 +1,51 @@
+version: 2
+
+models:
+
+  - name: stg_local_bike__order_items
+    description: "Details of the order with items"
+    columns:
+      - name: order_items_id
+        description: "Unique identify (Primary key) of order_items. It's a concatenation of order_id and item_id"
+        tests:
+          - not_null
+          - unique
+
+      - name: order_id
+        description: "Secondary key to join orders table"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__orders')
+                field: order_id
+
+      - name: product_id
+        description: "Secondary key to join products table"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__products')
+                field: product_id
+
+      - name: order_quantity
+        description: "Quantity of the product sell in the order"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+
+      - name: unit_price
+        description: "Unit price of the product"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+                expression: "> 0"
+
+      - name: discount
+        description: "Discount in percent offer on the product"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "BETWEEN 0 AND 1"
