@@ -1,0 +1,47 @@
+version: 2
+
+models:
+
+  - name: stg_local_bike__stores
+    description: "List of the stores owned by the company"
+    columns:
+      - name: store_id
+        description: "Unique identify (Primary key) of the store"
+        tests:
+          - not_null
+          - unique
+          
+      - name: store_name
+        description: "Name of the store"
+        tests:
+          - not_null
+          
+      - name: store_phone
+        description: "Phone number of the store"
+        tests:
+          - not_null
+          
+      - name: store_email
+        description: "Email address of the store"
+        tests:
+          - not_null
+          
+      - name: store_street
+        description: "Address street of the store"
+        tests:
+          - not_null
+          
+      - name: store_city
+        description: "City of the store"
+        tests:
+          - not_null
+
+      - name: store_state
+        description: "State of the store"
+        tests:
+          - not_null
+
+      - name: store_zip_code
+        description: "Zip code of the store"
+        tests:
+          - not_null

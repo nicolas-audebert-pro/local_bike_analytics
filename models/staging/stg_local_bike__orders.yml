@@ -1,0 +1,64 @@
+version: 2
+
+models:
+
+  - name: stg_local_bike__orders
+    description: "Header of the orders"
+    columns:
+      - name: order_id
+        description: "Unique identify (Primary key) for the order"
+        tests:
+          - not_null
+          - unique
+
+      - name : customer_id
+        description: "Secondary key to join customers table. Identifiant of the customer who buy the order"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__customers')
+                field: customer_id
+
+      - name : order_status
+        description: "Identifiant of the status 1, 2, 3 or 4 (shipped)"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+                expression: "IN (1, 2, 3, 4)"
+
+      - name : order_date
+        description: "Date of the order"
+        tests:
+          - not_null
+
+      - name : required_date
+        description: "Date of shipping ask by the customer"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+                expression: ">= order_date"
+
+      - name : shipped_date
+        description: "Real shipped date of the order. NULL if not delivered yet."
+        tests:
+        - dbt_utils.expression_is_true:
+                expression: " >= order_date OR shipped_date IS NULL"
+
+      - name : store_id
+        description: "Secondary key to join stores table. Identifiant of the store attached to the order"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__stores')
+                field: store_id
+
+      - name : staff_id
+        description: "Secondary key to join staffs table. Identifiant of the staff who in charge of the order"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_local_bike__staffs')
+                field: staff_id

@@ -1,0 +1,22 @@
+version: 2
+
+models:
+
+  - name: int_local_bike__managers
+    description: "List of the staffs who are managers"
+    columns:
+      - name: manager_id
+        description: "Unique identify (Primary key) of manager"
+        tests:
+          - not_null
+          - unique
+
+      - name: manager_full_name
+        description: "Full name of the manager"
+        tests:
+          - not_null
+
+      - name: manager_email
+        description: "Email address of the manager"
+        tests:
+          - not_null

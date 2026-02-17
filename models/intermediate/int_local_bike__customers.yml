@@ -1,0 +1,54 @@
+version: 2
+
+models:
+
+  - name: int_local_bike__customers
+    description: "List of the customers"
+    columns:
+      - name: customer_id
+        description: "Unique identify (Primary key) of customer"
+        tests:
+          - not_null
+          - unique
+
+      - name: customer_full_name
+        description: "Full name of the customer"
+        tests:
+          - not_null
+
+      - name: customer_first_name
+        description: "First name of the customer"
+        tests:
+          - not_null
+          
+      - name: customer_last_name
+        description: "Last name of the customer"
+        tests:
+          - not_null
+          
+      - name: customer_phone
+        description: "Phone number of the customer"
+          
+      - name: customer_email
+        description: "Email address of the customer"
+        tests:
+          - not_null
+          - unique
+          
+      - name: customer_street
+        description: "Address street of the customer"
+          
+      - name: customer_city
+        description: "City of the customer"
+        tests:
+        - not_null
+
+      - name: customer_state
+        description: "State of the customer"
+        tests:
+        - not_null
+
+      - name: customer_zip_code
+        description: "Zip code of the customer"
+        tests:
+        - not_null

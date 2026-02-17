@@ -6,5 +6,5 @@ SELECT
     category_id,
     model_year,
     product_unit_price
-FROM {{ref("int_local_bike__products")}} p
-LEFT JOIN {{ref("int_local_bike__brands")}} b ON b.brand_id = p.brand_id
+FROM {{ref("stg_local_bike__products")}} p
+LEFT JOIN {{ref("stg_local_bike__brands")}} b ON b.brand_id = p.brand_id
