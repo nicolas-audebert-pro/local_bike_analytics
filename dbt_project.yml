@@ -40,9 +40,9 @@ models:
   # Applies to all files under models/staging
       staging:
         +materialized: view
-  # Applies to all files under models/staging
+  # Applies to all files under models/intermediate
       intermediate:
         +materialized: view
-  # Applies to all files under models/staging
+  # Applies to all files under models/mart
       mart:
         +materialized: table
